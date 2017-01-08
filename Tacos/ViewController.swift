@@ -38,9 +38,8 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
+
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
@@ -63,6 +62,12 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         return UICollectionViewCell()
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? TacoCell{
+            cell.shakeable()
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 95, height: 125)
     }
@@ -78,9 +83,18 @@ extension UIView{
         layer.shadowOpacity = 0.7
         layer.shadowOffset = CGSize.zero
     }
-    
+}
+
+
+extension UICollectionViewCell{
     func shakeable(){
-        
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.1
+        animation.repeatCount = 5
+        animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: self.center.x-5, y: self.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: self.center.x+5, y: self.center.y))
+        layer.add(animation, forKey: "position")
     }
     
 }
